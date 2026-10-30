@@ -1,14 +1,5 @@
-# Scripts
-
-```
-setup.sh        environment, model weights, datasets
-llada.py        LLaDA:  semi_ar(), abd(), recon()
-dream.py        Dream:  semi_ar(), abd(), recon()
-answers.py      answer parsing (ReCon vote) and scoring
-run_eval.py     one row on one dataset -> accuracy / mean forward passes
-run.sh          the whole table
-datasets_/      prompts and reference answers
-```
+This repository contains code for our NeurIPS 2026 main accepted paper:
+Renoise Consistency: Unlocking Efficient Self-Correction for Diffusion Large Language Models
 
 ## Run
 
