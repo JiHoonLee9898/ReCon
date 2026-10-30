@@ -4,8 +4,8 @@ Renoise Consistency: Unlocking Efficient Self-Correction for Diffusion Large Lan
 ## Run
 
 ```bash
-bash setup.sh                       # once
-bash run.sh                         # whole table (about 15 hours on one H100)
+bash setup.sh                       # install
+bash run.sh                         # all at once
 bash run.sh llada gsm8k             # one model, one dataset
 
 python run_eval.py --model llada --dataset gsm8k --method abd             # draft row
