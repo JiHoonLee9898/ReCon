@@ -1,4 +1,5 @@
 This repository contains code for our NeurIPS 2026 main accepted paper:
+
 Renoise Consistency: Unlocking Efficient Self-Correction for Diffusion Large Language Models
 
 ## Run
