@@ -5,9 +5,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![ML3 @ Yonsei](https://img.shields.io/badge/ML3-@%20Yonsei-1f3c88.svg)](https://ml3.yonsei.ac.kr/)
 
-**Jihoon Lee**<sup>1</sup>, **Yeongbin Seo**<sup>2</sup>, **Jaehyung Kim**<sup>1</sup>
+**Jihoon Lee**<sup>1</sup>, **Yeongbin Seo**<sup>2,3</sup>, **Jaehyung Kim**<sup>1</sup>
 
-<sup>1</sup>Yonsei University &nbsp; <sup>2</sup>University of Toronto, Vector Institute
+<sup>1</sup>Yonsei University &nbsp; <sup>2</sup>University of Toronto &nbsp; <sup>3</sup>Vector Institute
 
 <img src="assets/neurips_logo.svg" alt="NeurIPS" height="48"> &nbsp; **NeurIPS 2026 main**
 
