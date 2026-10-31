@@ -157,19 +157,24 @@ Findings #2: <b>Scattered Anchor Context</b> resolves the <b>train-inference mis
 
 $$\mathcal{L}(\theta) \triangleq -\mathbb{E}_{t,x_0,x_t}\left[\frac{1}{t}\sum_{i=1}^{L}\mathbb{1}\left[x_t^i = M\right]\log p_\theta\left(x_0^i \mid x_t\right)\right]$$
 
-<table>
-<tr>
-<td align="center">
-<b>Uniform masking</b> (t ~ U[0,1]) yields<br>
-<b>scattered anchor contexts</b> <b>(train)</b>,<br>
-while existing decoding methods <b>(inference)</b><br>
+<div align="center">
+
+**Uniform masking** ($t \sim U[0,1]$) yields<br>
+**scattered anchor contexts** **(train)**,<br>
+while existing decoding methods **(inference)**<br>
 impose a mismatched left-to-right prior.<br>
-<b>ReCon</b> resolves this mismatch<br>
+**ReCon** resolves this mismatch<br>
 during reconstruction.
-</td>
-<td width="30%"><img src="assets/reconstruction_success_rate.png" alt="Reconstruction success rate"></td>
-</tr>
-</table>
+
+| Forward steps | Uniform random anchors | Left-sided anchors |
+|:---:|:---:|:---:|
+| 1 | **64.57%** | 26.50% |
+| 5 | **86.56%** | 31.40% |
+| 10 | **89.21%** | 48.28% |
+
+Reconstruction success rate of initially correct GSM8K outputs (LLaDA 8B Instruct) after remasking 90% of the tokens.
+
+</div>
 
 ## Results
 

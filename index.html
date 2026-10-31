@@ -177,9 +177,9 @@
     <!-- Takeaway -->
     <section class="section hero" style="background-color:#ffffff; border-top:1px solid #ddd;">
       <div class="container is-max-desktop">
-        <h2 class="title is-3 has-text-centered">Takeaway</h2>
-        <div class="columns is-vcentered">
-          <div class="column is-9 has-text-centered">
+        <div class="columns is-centered">
+          <div class="column is-10 has-text-centered">
+            <h2 class="title is-3 has-text-centered">Takeaway</h2>
             <div style="font-size:0.85rem;">
               \[\mathcal{L}(\theta) \triangleq -\,\mathbb{E}_{t,x_0,x_t}\left[\frac{1}{t}\sum_{i=1}^{L}\mathbb{1}\left[x_t^i = M\right]\log p_\theta\left(x_0^i \mid x_t\right)\right]\]
             </div>
@@ -191,11 +191,19 @@
               <b>ReCon</b> resolves this mismatch<br>
               during reconstruction.
             </p>
-          </div>
-          <div class="column is-3">
-            <figure class="image" style="margin:0 auto; max-width:220px;">
-              <img src="assets/reconstruction_success_rate.png" alt="Reconstruction success rate from uniform random vs left-sided anchors" loading="lazy">
-            </figure>
+            <table class="table is-narrow" style="margin:1.5rem auto 0;">
+              <thead>
+                <tr><th>Forward steps</th><th>Uniform random anchors</th><th>Left-sided anchors</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td><b>64.57%</b></td><td>26.50%</td></tr>
+                <tr><td>5</td><td><b>86.56%</b></td><td>31.40%</td></tr>
+                <tr><td>10</td><td><b>89.21%</b></td><td>48.28%</td></tr>
+              </tbody>
+            </table>
+            <p class="has-text-grey" style="margin-top:.5rem;">
+              Reconstruction success rate of initially correct GSM8K outputs (LLaDA 8B Instruct) after remasking 90% of the tokens.
+            </p>
           </div>
         </div>
       </div>
