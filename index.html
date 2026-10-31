@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Renoise Consistency (ReCon) and Adaptive Block Drafting (ABD): efficient post-hoc self-correction and drafting for diffusion large language models.">
+  <meta name="keywords" content="diffusion language models, DLM, self-correction, parallel decoding, Renoise Consistency, ReCon, Adaptive Block Drafting">
+  <meta name="author" content="Jihoon Lee, Yeongbin Seo, Jaehyung Kim">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Renoise Consistency: Unlocking Efficient Self-Correction for Diffusion Large Language Models">
+  <meta property="og:url" content="https://jihoonlee9898.github.io/ReCon/">
+  <meta property="og:image" content="https://jihoonlee9898.github.io/ReCon/assets/overview.png">
+
+  <title>ReCon: Renoise Consistency for Diffusion LLMs</title>
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+  <style>
+    .finding { font-size: 1.15rem; line-height: 1.6; }
+    .hl { color: #22a722; font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <main id="main-content">
+    <!-- Title / authors -->
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
+              <h1 class="title is-1 publication-title">
+                Renoise Consistency: Unlocking Efficient Self-Correction for<br>Diffusion Large Language Models
+              </h1>
+              <div class="is-size-5 publication-authors">
+                <span class="author-block"><a href="#" target="_blank">Jihoon Lee</a><sup>1</sup>,</span>
+                <span class="author-block"><a href="#" target="_blank">Yeongbin Seo</a><sup>2</sup>,</span>
+                <span class="author-block"><a href="#" target="_blank">Jaehyung Kim</a><sup>1</sup></span>
+              </div>
+
+              <div class="is-size-5 publication-authors">
+                <span class="author-block">
+                  <sup>1</sup>Yonsei University &nbsp;
+                  <sup>2</sup>University of Toronto, Vector Institute
+                </span>
+              </div>
+
+              <div class="is-size-6 publication-authors" style="margin-top:.4rem;">
+                <span class="author-block"><code>{jihoonlee98,jaehyungk}@yonsei.ac.kr</code></span><br>
+                <span class="author-block"><code>ybseo@cs.toronto.edu</code></span>
+              </div>
+
+              <div class="publication-venue-logo" style="margin-top:1rem;">
+                <img src="assets/neurips_logo.svg" alt="NeurIPS" style="height:64px; width:auto;">
+              </div>
+              <div class="is-size-5 publication-authors" style="margin-top:.2rem;">
+                <span class="author-block"><b>NeurIPS 2026 main</b></span>
+              </div>
+
+              <div class="column has-text-centered">
+                <div class="publication-links" style="margin-top:.75rem;">
+                  <!-- TODO: arXiv link -->
+                  <span class="link-block">
+                    <a href="#" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon"><i class="ai ai-arxiv"></i></span>
+                      <span>arXiv</span>
+                    </a>
+                  </span>
+                  <span class="link-block">
+                    <a href="https://github.com/JiHoonLee9898/ReCon" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon"><i class="fab fa-github"></i></span>
+                      <span>Code</span>
+                    </a>
+                  </span>
+                  <span class="link-block">
+                    <a href="https://ml3.yonsei.ac.kr/" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon"><i class="fas fa-flask"></i></span>
+                      <span>ML3 @ Yonsei</span>
+                    </a>
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Motivation -->
+    <section class="section hero" style="background-color:#ffffff; border-top:1px solid #ddd;">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column is-10">
+            <h2 class="title is-3 has-text-centered">Motivation</h2>
+            <figure class="image" style="margin:1rem auto; max-width:1000px;">
+              <img src="assets/example.png" alt="An illustrative ReCon example from GSM8K" loading="lazy" style="width:100%; height:auto;">
+            </figure>
+            <p class="has-text-centered finding"><b>Diffusion Large Language Models (DLMs) can self-correct.</b></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Abstract -->
+    <section class="section hero" style="background-color:#ffffff; border-top:1px solid #ddd;">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column is-10">
+            <h2 class="title is-3 has-text-centered">Abstract</h2>
+            <div class="content has-text-justified">
+              <p>
+                Diffusion Large Language Models (DLMs) are being actively explored as promising alternatives to
+                autoregressive models due to their fast and flexible generation capabilities. To optimize inference in
+                DLMs, recent studies have proposed a variety of decoding algorithms. However, the tendency of these
+                methods to mimic autoregressive generation limits the speed and flexibility of DLMs, while also
+                preventing the methods from fully realizing their potential. Moreover, this rigid approach leads to
+                error propagation, while existing sampling-based correction methods incur prohibitive computational
+                costs. To overcome this, we propose <b>Renoise Consistency</b>, a novel post-hoc approach that enables
+                effective self-correction by maximizing train&ndash;inference consistency and can be applied to any
+                decoding algorithm with a flexible computational budget. Furthermore, we introduce <b>Adaptive Block
+                Drafting</b>, which leverages consistent internal representations of DLMs to significantly reduce the
+                overall computational cost. When combined, our proposed method achieves up to a 9.00% performance
+                improvement over the semi-autoregressive baseline, along with a 25.85% reduction in forward steps.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Observation -->
+    <section class="section hero" style="background-color:#ffffff; border-top:1px solid #ddd;">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column is-10">
+            <h2 class="title is-3 has-text-centered">Observation</h2>
+            <figure class="image" style="margin:1rem auto; max-width:1000px;">
+              <img src="assets/finding1.png" alt="Bidirectional inertia in confidence distributions" loading="lazy">
+            </figure>
+            <p class="has-text-centered finding">
+              Findings #1: <span class="hl">Bidirectional Inertia</span> reveals the optimal <b>output length</b> or <b>block length</b>.<br>
+              <b>A</b>daptive <b>B</b>lock <b>D</b>rafting (ABD), efficient drafting.
+            </p>
+            <figure class="image" style="margin:2rem auto 1rem; max-width:1000px;">
+              <img src="assets/finding2.png" alt="Scattered anchor context and parallel decoding" loading="lazy">
+            </figure>
+            <p class="has-text-centered finding">
+              Findings #2: <span class="hl">Scattered Anchor Context</span> resolves the <b>train-inference mismatch</b>.<br>
+              <b>Re</b>noise <b>Con</b>sistency (ReCon), efficient self-correction.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Method -->
+    <section class="section hero" style="background-color:#ffffff; border-top:1px solid #ddd;">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column is-10">
+            <h2 class="title is-3 has-text-centered">Method</h2>
+            <figure class="image" style="margin:1rem auto; max-width:1000px;">
+              <img src="assets/overview.png" alt="Overview of Adaptive Block Drafting and Renoise Consistency" loading="lazy">
+            </figure>
+            <p class="has-text-centered finding"><b>2 step train-free inference (ABD + ReCon).</b></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Takeaway -->
+    <section class="section hero" style="background-color:#ffffff; border-top:1px solid #ddd;">
+      <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Takeaway</h2>
+        <div class="columns is-vcentered">
+          <div class="column is-9 has-text-centered">
+            <div style="font-size:0.85rem;">
+              \[\mathcal{L}(\theta) \triangleq -\,\mathbb{E}_{t,x_0,x_t}\left[\frac{1}{t}\sum_{i=1}^{L}\mathbb{1}\left[x_t^i = M\right]\log p_\theta\left(x_0^i \mid x_t\right)\right]\]
+            </div>
+            <p class="finding" style="margin-top:1rem;">
+              <span class="hl">Uniform masking</span> (\(t \sim U[0,1]\)) yields<br>
+              <span class="hl">scattered anchor contexts</span> <b>(train)</b>,<br>
+              while existing decoding methods <b>(inference)</b><br>
+              impose a mismatched left-to-right prior.<br>
+              <b>ReCon</b> resolves this mismatch<br>
+              during reconstruction.
+            </p>
+          </div>
+          <div class="column is-3">
+            <figure class="image" style="margin:0 auto; max-width:220px;">
+              <img src="assets/reconstruction_success_rate.png" alt="Reconstruction success rate from uniform random vs left-sided anchors" loading="lazy">
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="section hero" style="background-color:#ffffff; border-top:1px solid #ddd;">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column is-10">
+            <h2 class="title is-3 has-text-centered">Results</h2>
+            <figure class="image" style="margin:1rem auto; max-width:1000px;">
+              <img src="assets/results_recon_improves.png" alt="Accuracy added by ReCon on top of existing decoding methods" loading="lazy">
+            </figure>
+            <p class="has-text-centered finding" style="position:relative; z-index:1;">
+              <b>ReCon improves drafts.</b><br>
+              Semi-AR: up to <span class="hl">7.17%p</span><br>
+              Conf. fallback: up to <span class="hl">6.83%p</span><br>
+              KLASS: up to <span class="hl">4.95%p</span><br>
+              ABD: up to <span class="hl">5.69%p</span>
+            </p>
+            <figure class="image" style="margin:2rem auto 1rem; max-width:700px;">
+              <img src="assets/results_vs_lightweight.png" alt="ABD + ReCon vs WINO and Saber on LLaDA" loading="lazy">
+            </figure>
+            <p class="has-text-centered finding" style="margin-top:-1.8rem; position:relative; z-index:1;">
+              <b>ABD + ReCon outperforms lightweight revocable decodings.</b><br>
+              WINO: up to <span class="hl">23.5%p</span><br>
+              Saber: up to <span class="hl">18.1%p</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BibTeX -->
+    <section class="section" id="BibTeX">
+      <div class="container is-max-desktop content">
+        <div class="bibtex-header" style="display:flex;align-items:center;justify-content:space-between;">
+          <h2 class="title">BibTeX</h2>
+          <button class="button is-small is-dark" onclick="copyBibTeX(this)" title="Copy BibTeX">
+            <span class="icon"><i class="fas fa-copy"></i></span><span>Copy</span>
+          </button>
+        </div>
+<pre id="bibtex-code"><code>Coming soon.</code></pre>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-8">
+            <div class="content">
+              <p>
+                This page was built using the
+                <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> (CC BY-SA 4.0).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    function copyBibTeX(btn) {
+      const text = document.getElementById('bibtex-code').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const label = btn.querySelector('span:last-child');
+        label.textContent = 'Copied';
+        setTimeout(() => { label.textContent = 'Copy'; }, 1500);
+      });
+    }
+  </script>
+</body>
+</html>
